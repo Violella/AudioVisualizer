@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="OpenCV (extern)">
+    <CLASSES>
+      <root url="file://C:/temp/opencv/opencv/build/java" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://C:/temp/opencv/opencv/build/java" />
+    </SOURCES>
+    <jarDirectory url="file://C:/temp/opencv/opencv/build/java" recursive="false" />
+    <jarDirectory url="file://C:/temp/opencv/opencv/build/java" recursive="false" type="SOURCES" />
+  </library>
+</component>
