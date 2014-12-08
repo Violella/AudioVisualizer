@@ -9,6 +9,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Minim-2.2.0" level="project" />
-    <orderEntry type="library" name="OpenCV (extern)" level="project" />
+    <orderEntry type="library" name="opencv-2.4.10" level="project" />
   </component>
 </module>

@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="opencv-2.4.10">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/libs/opencv" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="http://docs.opencv.org/java/" />
+    </JAVADOC>
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/libs/opencv/x64" />
+    </NATIVE>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/libs/opencv" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/libs/opencv" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/libs/opencv" recursive="false" type="SOURCES" />
+  </library>
+</component>
