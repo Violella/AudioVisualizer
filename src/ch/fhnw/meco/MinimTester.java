@@ -69,7 +69,6 @@ public class MinimTester extends Application {
                 } else {
                     FFT fourier = new FFT(audioPlayer.bufferSize(), audioPlayer.sampleRate());
 
-
                     audioPlayer.play();
                     btn.setText("Stop");
                 }
