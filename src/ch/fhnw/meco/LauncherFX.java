@@ -91,7 +91,6 @@ public class LauncherFX extends Application {
             }
         });
 
-
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 12, 15, 12));
         hbox.setSpacing(10);
