@@ -6,8 +6,10 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -24,7 +26,7 @@ import java.io.File;
  */
 public class LauncherFX extends Application {
 
-    private int WIDTH  = 800;
+    private int WIDTH  = 600;
     private int HEIGHT = 800;
 
     public static void main(String[] args) {
@@ -56,41 +58,55 @@ public class LauncherFX extends Application {
     private void createComponents(Pane pane) {
 
         // MediaPlayer
-        final Media media = new Media(new File("assets/video/big_buck_bunny.mp4").toURI().toString());
-        final MediaPlayer mediaPlayer = new MediaPlayer(media);
-        final MediaView mediaView = new MediaView(mediaPlayer);
+        final Label original = new Label("Original");
+        final MediaView mediaViewOriginal = createMediaPlayer();
 
-        mediaView.setFitWidth(500);
+        final Label result = new Label("Resultat");
+        final MediaView mediaViewResult = createMediaPlayer();
 
         // Toolbar
-        HBox hbox = createPlayToolbar(mediaPlayer);
+        HBox hbox = createPlayToolbar(mediaViewResult.getMediaPlayer(), mediaViewOriginal.getMediaPlayer());
 
         // Add components
-        pane.getChildren().add(mediaView);
+        pane.getChildren().addAll(original, mediaViewOriginal);
+        pane.getChildren().addAll(result, mediaViewResult);
         pane.getChildren().add(hbox);
     }
 
-    private HBox createPlayToolbar(final MediaPlayer mediaPlayer) {
-        Button playButton = createButton("\u25B6", "Play"); // ▶ U+25B6 \u25B6
+    private MediaView createMediaPlayer() {
+        final Media media = new Media(new File("assets/video/big_buck_bunny.mp4").toURI().toString());
+        final MediaPlayer mediaPlayer = new MediaPlayer(media);
+        final MediaView mediaView = new MediaView(mediaPlayer);
+        mediaView.setFitWidth(WIDTH);
+        return mediaView;
+    }
+
+    private HBox createPlayToolbar(final MediaPlayer originalMediaPlayer, final MediaPlayer resultMediaPlayer) {
+        Image playImage = new Image(getClass().getResourceAsStream("/images/play.png"), 32, 32, true, true);
+        Button playButton = createButton(playImage, "Play"); // ▶ U+25B6 \u25B6
         playButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                mediaPlayer.play();
+                originalMediaPlayer.play();
+                resultMediaPlayer.play();
             }
         });
-
-        Button stopButton = createButton("\u25FC", "Stop"); // ◼ U+25FC \u25FC
+        Image stopImage = new Image(getClass().getResourceAsStream("/images/stop.png"), 32, 32, true, true);
+        Button stopButton = createButton(stopImage, "Stop"); // ◼ U+25FC \u25FC
         stopButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                mediaPlayer.stop();
+                originalMediaPlayer.stop();
+                resultMediaPlayer.stop();
             }
         });
-        Button pauseButton = createButton("||", "Pause"); // ▐ U+2590 \u2590
+        Image pauseImage = new Image(getClass().getResourceAsStream("/images/pause.png"), 32, 32, true, true);
+        Button pauseButton = createButton(pauseImage, "Pause"); // ▐ U+2590 \u2590
         pauseButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                mediaPlayer.pause();
+                originalMediaPlayer.pause();
+                resultMediaPlayer.pause();
             }
         });
 
@@ -102,9 +118,9 @@ public class LauncherFX extends Application {
         return hbox;
     }
 
-    private Button createButton(String symbol, String tooltip) {
+    private Button createButton(Image image, String tooltip) {
         Button button = new Button();
-        button.setText(symbol);
+        button.setGraphic(new ImageView(image));
         button.setTooltip(new Tooltip(tooltip));
         button.setPrefSize(32, 32);
         button.setFont(Font.font("Verdana", 32));
