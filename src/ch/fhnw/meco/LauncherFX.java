@@ -1,20 +1,20 @@
 package ch.fhnw.meco;
 
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -24,18 +24,22 @@ import java.io.File;
  */
 public class LauncherFX extends Application {
 
+    private int WIDTH  = 800;
+    private int HEIGHT = 800;
+
     public static void main(String[] args) {
         launch(args);
     }
 
+
     @Override
     public void start(Stage stage) {
 
-        StackPane root = new StackPane();
+        // Flowpane
+        VBox root = new VBox();
+        createComponents(root);
 
-        createComponents(root.getChildren());
-
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, WIDTH, HEIGHT);
         stage.setScene(scene);
         stage.sizeToScene();
         stage.setTitle("AudioVisualizer");
@@ -43,25 +47,31 @@ public class LauncherFX extends Application {
         stage.show();
     }
 
+
     /**
      * Initialisiert alle UI Komponenten und fügt sie dem StackPane hinzu.
      *
-     * @param componentList Liste mit UI Komponenten
+     * @param pane Pane mit den UI Komponenten
      */
-    private void createComponents(ObservableList<Node> componentList) {
+    private void createComponents(Pane pane) {
 
         // MediaPlayer
         final Media media = new Media(new File("assets/video/big_buck_bunny.mp4").toURI().toString());
         final MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setAutoPlay(false);
         final MediaView mediaView = new MediaView(mediaPlayer);
-        mediaView.setFitWidth(600);
 
-        // Button
-        Button playButton = new Button();
-        playButton.setText("\u25B6"); // ▶ U+25B6 \u25B6
-        playButton.setTooltip(new Tooltip("Play"));
-        playButton.setPrefSize(32, 32);
+        mediaView.setFitWidth(500);
+
+        // Toolbar
+        HBox hbox = createPlayToolbar(mediaPlayer);
+
+        // Add components
+        pane.getChildren().add(mediaView);
+        pane.getChildren().add(hbox);
+    }
+
+    private HBox createPlayToolbar(final MediaPlayer mediaPlayer) {
+        Button playButton = createButton("\u25B6", "Play"); // ▶ U+25B6 \u25B6
         playButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -69,21 +79,14 @@ public class LauncherFX extends Application {
             }
         });
 
-        Button stopButton = new Button();
-        stopButton.setText("\u25FC"); // ◼ U+25FC \u25FC
-        stopButton.setTooltip(new Tooltip("Stop"));
-        stopButton.setPrefSize(32, 32);
+        Button stopButton = createButton("\u25FC", "Stop"); // ◼ U+25FC \u25FC
         stopButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 mediaPlayer.stop();
             }
         });
-
-        Button pauseButton = new Button();
-        pauseButton.setText("\u2590\u2590"); // ▐ U+2590 \u2590
-        pauseButton.setTooltip(new Tooltip("Pause"));
-        pauseButton.setPrefSize(32, 32);
+        Button pauseButton = createButton("||", "Pause"); // ▐ U+2590 \u2590
         pauseButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -91,14 +94,20 @@ public class LauncherFX extends Application {
             }
         });
 
+        // HBox
         HBox hbox = new HBox();
-        hbox.setPadding(new Insets(15, 12, 15, 12));
+        hbox.setPadding(new Insets(10));
         hbox.setSpacing(10);
-
         hbox.getChildren().addAll(playButton, stopButton, pauseButton);
+        return hbox;
+    }
 
-        // Add components
-        componentList.add(mediaView);
-        componentList.add(hbox);
+    private Button createButton(String symbol, String tooltip) {
+        Button button = new Button();
+        button.setText(symbol);
+        button.setTooltip(new Tooltip(tooltip));
+        button.setPrefSize(32, 32);
+        button.setFont(Font.font("Verdana", 32));
+        return button;
     }
 }
