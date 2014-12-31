@@ -38,7 +38,7 @@ public class LauncherFX extends Application {
     public void start(Stage stage) {
 
         // Flowpane
-        VBox root = new VBox();
+        VBox root = new VBox(5);
         createComponents(root);
 
         Scene scene = new Scene(root, WIDTH, HEIGHT);
@@ -58,10 +58,10 @@ public class LauncherFX extends Application {
     private void createComponents(Pane pane) {
 
         // MediaPlayer
-        final Label original = new Label("Original");
+        final Label original = new Label("Original:");
         final MediaView mediaViewOriginal = createMediaPlayer();
 
-        final Label result = new Label("Resultat");
+        final Label result = new Label("Resultat:");
         final MediaView mediaViewResult = createMediaPlayer();
 
         // Toolbar
@@ -77,6 +77,7 @@ public class LauncherFX extends Application {
         final Media media = new Media(new File("assets/video/big_buck_bunny.mp4").toURI().toString());
         final MediaPlayer mediaPlayer = new MediaPlayer(media);
         final MediaView mediaView = new MediaView(mediaPlayer);
+
         mediaView.setFitWidth(WIDTH);
         return mediaView;
     }
@@ -109,12 +110,20 @@ public class LauncherFX extends Application {
                 resultMediaPlayer.pause();
             }
         });
+        Image convertImage = new Image(getClass().getResourceAsStream("/images/nui.png"), 32, 32, true, true);
+        Button convertButton = createButton(convertImage, "Film konvertieren"); // ▐ U+2590 \u2590
+        convertButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO: Analysieren
+            }
+        });
 
         // HBox
         HBox hbox = new HBox();
-        hbox.setPadding(new Insets(10));
+        //hbox.setPadding(new Insets(10));
         hbox.setSpacing(10);
-        hbox.getChildren().addAll(playButton, stopButton, pauseButton);
+        hbox.getChildren().addAll(playButton, stopButton, pauseButton, convertButton);
         return hbox;
     }
 
