@@ -1,4 +1,4 @@
-package ch.fhnw.meco.processor;
+package ch.fhnw.meco.video;
 
 import ch.fhnw.meco.util.Constants;
 import com.xuggle.mediatool.IMediaWriter;
@@ -15,9 +15,9 @@ import java.util.logging.Logger;
 /**
  * Setzt Images zu einem Film zusammen.
  */
-public class VideoBuilder {
+public class VideoEncoder {
 
-    private static final Logger log = Logger.getLogger(VideoBuilder.class.getName());
+    private static final Logger log = Logger.getLogger(VideoEncoder.class.getName());
 
     private static final String outputFilename = Constants.VIDEO_DEFAULT_DESTINATION;
     private static final LinkedList<BufferedImage> list = new LinkedList<>();

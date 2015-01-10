@@ -1,5 +1,7 @@
-package ch.fhnw.meco.processor;
+package ch.fhnw.meco.video;
 
+import ch.fhnw.meco.processor.DemoProcessor;
+import ch.fhnw.meco.processor.IVideoProcessor;
 import com.xuggle.mediatool.IMediaReader;
 import com.xuggle.mediatool.MediaListenerAdapter;
 import com.xuggle.mediatool.ToolFactory;
@@ -9,7 +11,6 @@ import com.xuggle.xuggler.Global;
 import com.xuggle.xuggler.IAudioSamples;
 
 import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
 
 /**
  * Analysiert den Film und zerlegt ihn in einzelne Teile.
@@ -29,31 +30,37 @@ public class VideoDecoder {
     private static final long MICRO_SECONDS_BETWEEN_FRAMES = (long)(Global.DEFAULT_PTS_PER_SECOND * SECONDS_BETWEEN_FRAMES);
 
     public static void manipulate(String inputFilename) {
-        System.out.println("MICRO_SECONDS_BETWEEN_FRAMES: "+ MICRO_SECONDS_BETWEEN_FRAMES);
+        System.out.println("MICRO_SECONDS_BETWEEN_FRAMES: " + MICRO_SECONDS_BETWEEN_FRAMES);
         IMediaReader mediaReader = ToolFactory.makeReader(inputFilename);
  
         // stipulate that we want BufferedImages created in BGR 24bit color space
         mediaReader.setBufferedImageTypeToGenerate(BufferedImage.TYPE_3BYTE_BGR);
-         
-        mediaReader.addListener(new ImageSnapListener());
+
+        IVideoProcessor processor = new DemoProcessor();
+        mediaReader.addListener(new ImageSnapListener(processor));
 
         // read out the contents of the media file and
         // dispatch events to the attached listener
         while (mediaReader.readPacket() == null) ;
 
         mediaReader.close();
-        VideoBuilder.build();
+        VideoEncoder.build();
     }
  
     private static class ImageSnapListener extends MediaListenerAdapter {
+
+        private IVideoProcessor processor;
+
+        public ImageSnapListener(IVideoProcessor processor) {
+            this.processor = processor;
+        }
 
         @Override
         public void onAudioSamples(IAudioSamplesEvent event) {
             final IAudioSamples audioSamples = event.getAudioSamples();
             final byte[] byteArray = audioSamples.getData().getByteArray(0, audioSamples.getSize());
 
-            // TODO: Weiterleiten des Musikdaten zur Analyse
-
+            processor.processAudio(byteArray);
         }
 
         public void onVideoPicture(IVideoPictureEvent event) {
@@ -76,8 +83,8 @@ public class VideoDecoder {
             if (event.getTimeStamp() - mLastPtsWrite >= MICRO_SECONDS_BETWEEN_FRAMES) {
 
                 final BufferedImage image = event.getImage();
-                final BufferedImage processedImage = ImageProcessing.process(image);
-                VideoBuilder.add(processedImage);
+                final BufferedImage processedImage = processor.processImage(image);
+                VideoEncoder.add(processedImage);
 
                 // update last write time
                 mLastPtsWrite += MICRO_SECONDS_BETWEEN_FRAMES;

@@ -4,12 +4,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Bearbeitet ein Image mit einem spezifischen Filter.
+ * Bietet eine Plattform um das Image anhand des AudioSamples zu bearbeiten.
+ *
  */
-public class ImageProcessing {
+public class DemoProcessor implements IVideoProcessor {
 
-    public static BufferedImage process(BufferedImage image) {
-
+    /**
+     * @param image Images
+     * @return      Image
+     */
+    public BufferedImage processImage(BufferedImage image) {
         Color color;
         Color newColor;
 
@@ -77,4 +81,12 @@ public class ImageProcessing {
         }
     }
 
+    /**
+     * Weist dem Imageprocessing eine neue Strategie je nach Audiosstream.
+     *
+     * @param byteArray Audio
+     */
+    public void processAudio(byte[] byteArray) {
+        // TODO: Images manipulieren
+    }
 }

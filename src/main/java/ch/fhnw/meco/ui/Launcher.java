@@ -1,6 +1,6 @@
 package ch.fhnw.meco.ui;
 
-import ch.fhnw.meco.processor.VideoDecoder;
+import ch.fhnw.meco.video.VideoDecoder;
 import ch.fhnw.meco.util.Constants;
 import javafx.application.Application;
 import javafx.application.Platform;
