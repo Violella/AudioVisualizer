@@ -13,13 +13,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
- * Setzt einen Film anhand einer Bilder von Images zusammen.
+ * Setzt Images zu einem Film zusammen.
  */
 public class VideoBuilder {
 
     private static final Logger log = Logger.getLogger(VideoBuilder.class.getName());
-
-    private static final double FRAME_RATE = 50;
 
     private static final String outputFilename = Constants.VIDEO_DEFAULT_DESTINATION;
     private static final LinkedList<BufferedImage> list = new LinkedList<>();

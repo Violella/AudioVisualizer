@@ -1,16 +1,13 @@
 package ch.fhnw.meco.ui;
 
-import ch.fhnw.meco.processor.VideoImageManipulation;
+import ch.fhnw.meco.processor.VideoDecoder;
 import ch.fhnw.meco.util.Constants;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -27,13 +24,14 @@ import java.io.File;
 /**
  * @author Josiane Manera
  */
-public class LauncherFX extends Application {
+public class Launcher extends Application {
 
     private static final int BUTTON_SIZE = 32;
     private static final int SPACING_VERTICAL = 5;
     private static final int SPACING_HORIZONTAL = 10;
     private static int WIDTH = 600;
-    private static int HEIGHT = 800;
+    private static int HEIGHT = 810;
+    private static int FOOTAGE_HEIGHT = 340;
     private ProgressBar progress;
 
     public static void main(String[] args) {
@@ -95,7 +93,7 @@ public class LauncherFX extends Application {
         final MediaPlayer mediaPlayer = getMediaPlayer(file);
         final MediaView mediaView = new MediaView(mediaPlayer);
 
-        mediaView.setFitWidth(WIDTH);
+        mediaView.setFitHeight(FOOTAGE_HEIGHT);
         return mediaView;
     }
 
@@ -160,7 +158,7 @@ public class LauncherFX extends Application {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        VideoImageManipulation.manipulate(Constants.VIDEO_DEFAULT_SOURCE);
+                        VideoDecoder.manipulate(Constants.VIDEO_DEFAULT_SOURCE);
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -202,6 +200,7 @@ public class LauncherFX extends Application {
 
     private void createProgressBar() {
         progress = new ProgressBar();
+        progress.setTooltip(new Tooltip("Video wird bearbeitet. Bitte warten..."));
         progress.setMaxWidth(WIDTH);
         progress.setVisible(false);
     }

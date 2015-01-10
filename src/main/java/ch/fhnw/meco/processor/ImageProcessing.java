@@ -31,7 +31,7 @@ public class ImageProcessing {
     }
 
     /**
-     * Vergrauung an dunklen stellen.
+     * Vergrauung an dunklen Stellen.
      *
      * @param color
      * @return

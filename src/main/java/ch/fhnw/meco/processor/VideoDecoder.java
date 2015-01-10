@@ -6,14 +6,16 @@ import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.mediatool.event.IAudioSamplesEvent;
 import com.xuggle.mediatool.event.IVideoPictureEvent;
 import com.xuggle.xuggler.Global;
+import com.xuggle.xuggler.IAudioSamples;
 
 import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 
 /**
  * Analysiert den Film und zerlegt ihn in einzelne Teile.
  *
  */
-public class VideoImageManipulation {
+public class VideoDecoder {
      
     // The video stream index, used to ensure we display frames from one and
     // only one video stream from the media container.
@@ -44,6 +46,15 @@ public class VideoImageManipulation {
     }
  
     private static class ImageSnapListener extends MediaListenerAdapter {
+
+        @Override
+        public void onAudioSamples(IAudioSamplesEvent event) {
+            final IAudioSamples audioSamples = event.getAudioSamples();
+            final byte[] byteArray = audioSamples.getData().getByteArray(0, audioSamples.getSize());
+
+            // TODO: Weiterleiten des Musikdaten zur Analyse
+
+        }
 
         public void onVideoPicture(IVideoPictureEvent event) {
  
