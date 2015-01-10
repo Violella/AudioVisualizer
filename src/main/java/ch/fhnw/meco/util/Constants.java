@@ -14,7 +14,8 @@ public class Constants {
     public static final String IMAGE_PLAY       = "/images/play.png";
     public static final String IMAGE_STOP       = "/images/stop.png";
     public static final String IMAGE_PAUSE      = "/images/pause.png";
-    public static final String IMAGE_PROCESSOR  = "/images/nui.png";
+    public static final String IMAGE_CONFIG     = "/images/config.png";
+    public static final String IMAGE_PROCESSOR  = "/images/film.png";
     public static final String APPLICATION_ICON = "/images/icon.png";
 
     // Strings

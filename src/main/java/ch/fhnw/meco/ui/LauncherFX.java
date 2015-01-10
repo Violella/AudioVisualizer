@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,8 +29,12 @@ import java.io.File;
  */
 public class LauncherFX extends Application {
 
-    private int WIDTH = 600;
-    private int HEIGHT = 800;
+    private static final int BUTTON_SIZE = 32;
+    private static final int SPACING_VERTICAL = 5;
+    private static final int SPACING_HORIZONTAL = 10;
+    private static int WIDTH = 600;
+    private static int HEIGHT = 800;
+    private ProgressBar progress;
 
     public static void main(String[] args) {
         launch(args);
@@ -39,8 +44,7 @@ public class LauncherFX extends Application {
     @Override
     public void start(Stage stage) {
 
-        // Flowpane
-        VBox root = new VBox(5);
+        VBox root = new VBox(SPACING_VERTICAL);
         createComponents(root);
 
         Scene scene = new Scene(root, WIDTH, HEIGHT);
@@ -59,29 +63,33 @@ public class LauncherFX extends Application {
      */
     private void createComponents(Pane pane) {
 
-        String file = Constants.VIDEO_DEFAULT_SOURCE;
+        String sourceFilm = Constants.VIDEO_DEFAULT_SOURCE;
 
         // MediaPlayer
         final Label original = new Label("Original:");
-        final MediaView originalMediaView = createMediaPlayer(file);
+        final MediaView originalMediaView = createMediaPlayer(sourceFilm);
 
         final Label result = new Label("Resultat:");
-        final MediaView resultMediaView = createMediaPlayer(file);
+        final MediaView resultMediaView = createMediaPlayer(sourceFilm);
 
         // Toolbar
         HBox hbox = createPlayToolbar(originalMediaView, resultMediaView);
+
+        // Progressbar
+        createProgressBar();
 
         // Add components
         pane.getChildren().addAll(original, originalMediaView);
         pane.getChildren().addAll(result, resultMediaView);
         pane.getChildren().add(hbox);
+        pane.getChildren().add(progress);
     }
 
     /**
      * Gibt eine MediaView zurück.
      *
-     * @param file
-     * @return
+     * @param file  Filmpfad
+     * @return      MediaView
      */
     private MediaView createMediaPlayer(String file) {
         final MediaPlayer mediaPlayer = getMediaPlayer(file);
@@ -94,18 +102,24 @@ public class LauncherFX extends Application {
     /**
      * Gibt einen MediaPlayer mit dem entsprechenden Media zurück.
      *
-     * @param file
-     * @return
+     * @param file  Filmpfad
+     * @return      MediaPlayer
      */
     private MediaPlayer getMediaPlayer(String file) {
         final Media media = new Media(new File(file).toURI().toString());
         return new MediaPlayer(media);
     }
 
+    /**
+     * Erzeugt eine Toolbar mit Buttons zum manipulieren des Filmes.
+     *
+     * @param originalMediaView     MediaView mit originalem Video
+     * @param resultMediaView       MediaVierw mir resultierendem Video
+     * @return                      Pane mit den Toolbar Komponenten
+     */
     private HBox createPlayToolbar(final MediaView originalMediaView, final MediaView resultMediaView) {
 
-        final Image playImage = new Image(getClass().getResourceAsStream(Constants.IMAGE_PLAY), 32, 32, true, true);
-        final Button playButton = createButton(playImage, "Play"); // ▶ U+25B6 \u25B6
+        final Button playButton = createButton(Constants.IMAGE_PLAY, "Play");
         playButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -113,8 +127,7 @@ public class LauncherFX extends Application {
                 resultMediaView.getMediaPlayer().play();
             }
         });
-        final Image stopImage = new Image(getClass().getResourceAsStream(Constants.IMAGE_STOP), 32, 32, true, true);
-        final Button stopButton = createButton(stopImage, "Stop"); // ◼ U+25FC \u25FC
+        final Button stopButton = createButton(Constants.IMAGE_STOP, "Stop");
         stopButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -122,8 +135,7 @@ public class LauncherFX extends Application {
                 resultMediaView.getMediaPlayer().stop();
             }
         });
-        final Image pauseImage = new Image(getClass().getResourceAsStream(Constants.IMAGE_PAUSE), 32, 32, true, true);
-        final Button pauseButton = createButton(pauseImage, "Pause"); // ▐ U+2590 \u2590
+        final Button pauseButton = createButton(Constants.IMAGE_PAUSE, "Pause");
         pauseButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -131,14 +143,19 @@ public class LauncherFX extends Application {
                 resultMediaView.getMediaPlayer().pause();
             }
         });
-        final Image convertImage = new Image(getClass().getResourceAsStream(Constants.IMAGE_PROCESSOR), 32, 32, true, true);
-        final Button convertButton = createButton(convertImage, "Film konvertieren"); // ▐ U+2590 \u2590
+        final Button configButton = createButton(Constants.IMAGE_CONFIG, "Einstellungen");
+        configButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO: Implement
+            }
+        });
+        final Button convertButton = createButton(Constants.IMAGE_PROCESSOR, "Film konvertieren");
         convertButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                playButton.setDisable(true);
-                stopButton.setDisable(true);
-                pauseButton.setDisable(true);
+                convertButton.setDisable(true);
+                progress.setVisible(true);
 
                 new Thread(new Runnable() {
                     @Override
@@ -147,11 +164,11 @@ public class LauncherFX extends Application {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                originalMediaView.getMediaPlayer().stop();
                                 resultMediaView.setMediaPlayer(getMediaPlayer(Constants.VIDEO_DEFAULT_DESTINATION));
-                                playButton.setDisable(false);
-                                stopButton.setDisable(false);
-                                pauseButton.setDisable(false);
+                                originalMediaView.getMediaPlayer().pause();
+                                originalMediaView.getMediaPlayer().stop();
+                                progress.setVisible(false);
+                                convertButton.setDisable(false);
                             }
                         });
 
@@ -160,20 +177,32 @@ public class LauncherFX extends Application {
             }
         });
 
-        // HBox
         HBox hbox = new HBox();
-        //hbox.setPadding(new Insets(10));
-        hbox.setSpacing(10);
-        hbox.getChildren().addAll(playButton, stopButton, pauseButton, convertButton);
+        hbox.setSpacing(SPACING_HORIZONTAL);
+        hbox.getChildren().addAll(playButton, stopButton, pauseButton, configButton, convertButton);
         return hbox;
     }
 
-    private Button createButton(Image image, String tooltip) {
+    /**
+     * Erstellt ein Button mit einem Anzeigebild und Tooltip.
+     *
+     * @param imagePath Anzeigebild
+     * @param tooltip   Tooltip
+     * @return          Button
+     */
+    private Button createButton(String imagePath, String tooltip) {
+        final Image image = new Image(getClass().getResourceAsStream(imagePath), BUTTON_SIZE, BUTTON_SIZE, true, true);
         Button button = new Button();
         button.setGraphic(new ImageView(image));
         button.setTooltip(new Tooltip(tooltip));
-        button.setPrefSize(32, 32);
-        button.setFont(Font.font("Verdana", 32));
+        button.setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
+        button.setFont(Font.font("Verdana", BUTTON_SIZE));
         return button;
+    }
+
+    private void createProgressBar() {
+        progress = new ProgressBar();
+        progress.setMaxWidth(WIDTH);
+        progress.setVisible(false);
     }
 }

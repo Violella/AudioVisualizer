@@ -12,6 +12,9 @@ import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+/**
+ * Setzt einen Film anhand einer Bilder von Images zusammen.
+ */
 public class VideoBuilder {
 
     private static final Logger log = Logger.getLogger(VideoBuilder.class.getName());
@@ -19,11 +22,9 @@ public class VideoBuilder {
     private static final double FRAME_RATE = 50;
 
     private static final String outputFilename = Constants.VIDEO_DEFAULT_DESTINATION;
-
     private static final LinkedList<BufferedImage> list = new LinkedList<>();
 
     public static void build() {
-
         // let's make a IMediaWriter to write the file.
         File file = new File(outputFilename);
         final IMediaWriter writer = ToolFactory.makeWriter(file.toString());
@@ -60,8 +61,9 @@ public class VideoBuilder {
              
         }
          
+        log.info("Wrote file " + outputFilename);
+
         // tell the writer to close and write the trailer if  needed
-        log.info("Write mp4 in " + outputFilename);
         writer.close();
     }
      
