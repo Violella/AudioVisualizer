@@ -5,16 +5,16 @@ import java.awt.image.BufferedImage;
 
 /**
  * Bietet eine Plattform um das Image anhand des AudioSamples zu bearbeiten.
- *
  */
-public class DemoProcessor implements IVideoProcessor {
+public class VideoProcessor implements IVideoProcessor {
 
     /**
      * @param image Images
-     * @return      Image
+     * @return Image
      */
     public BufferedImage processImage(BufferedImage image) {
-        Color color;
+        System.out.println("Img: " + image);
+        /*Color color;
         Color newColor;
 
         // Schleife über alle Pixel im Bild basierend auf Breite und Höhe (w = width, h = height)
@@ -30,7 +30,7 @@ public class DemoProcessor implements IVideoProcessor {
                 // Pixelwert mit neuer Farbe an Position setzen
                 image.setRGB(w, h, newColor.getRGB());
             }
-        }
+        }*/
         return image;
     }
 
@@ -88,5 +88,6 @@ public class DemoProcessor implements IVideoProcessor {
      */
     public void processAudio(byte[] byteArray) {
         // TODO: Images manipulieren
+        System.out.println("Aud: " + byteArray);
     }
 }
