@@ -22,7 +22,7 @@ public class Constants {
     public static final String IMAGE_PAUSE = "/images/pause.png";
     public static final String IMAGE_CONFIG = "/images/config.png";
     public static final String IMAGE_PROCESSOR = "/images/film.png";
-    public static final String APPLICATION_ICON = "/images/icon.png";
+    public static final String APPLICATION_ICON = "/images/audiVis.png";
 
     // Strings
     public static final String APPLICATION_NAME = "AudioVisualizer";
