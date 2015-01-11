@@ -1,20 +1,26 @@
 package ch.fhnw.meco.processor;
 
 import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * Bietet eine Plattform um das Image anhand des AudioSamples zu bearbeiten.
  */
 public class VideoProcessor implements IVideoProcessor {
+    private ArrayList<Float> frequencyData =new ArrayList<Float>();
 
     /**
      * @param image Images
      * @return Image
      */
     public BufferedImage processImage(BufferedImage image) {
-        System.out.println("Img: " + image);
-        /*Color color;
+        if (frequencyData == null) {
+            return image;
+        } else {
+
+        Color color;
         Color newColor;
 
         // Schleife über alle Pixel im Bild basierend auf Breite und Höhe (w = width, h = height)
@@ -30,8 +36,9 @@ public class VideoProcessor implements IVideoProcessor {
                 // Pixelwert mit neuer Farbe an Position setzen
                 image.setRGB(w, h, newColor.getRGB());
             }
-        }*/
-        return image;
+        }
+            return image;
+        }
     }
 
     /**
@@ -84,10 +91,9 @@ public class VideoProcessor implements IVideoProcessor {
     /**
      * Weist dem Imageprocessing eine neue Strategie je nach Audiosstream.
      *
-     * @param byteArray Audio
+     * @param audio Audio
      */
-    public void processAudio(byte[] byteArray) {
-        // TODO: Images manipulieren
-        System.out.println("Aud: " + byteArray);
+    public void processAudio(byte[] audio) {
+        // frequencyData = AudioAnalyzer.getFreqData(audio);
     }
 }

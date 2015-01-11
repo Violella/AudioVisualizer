@@ -1,6 +1,6 @@
 package ch.fhnw.meco.video;
 
-import ch.fhnw.meco.processor.DemoProcessor;
+import ch.fhnw.meco.processor.VideoProcessor;
 import ch.fhnw.meco.processor.IVideoProcessor;
 import com.xuggle.mediatool.IMediaReader;
 import com.xuggle.mediatool.MediaListenerAdapter;
@@ -36,7 +36,7 @@ public class VideoDecoder {
         // stipulate that we want BufferedImages created in BGR 24bit color space
         mediaReader.setBufferedImageTypeToGenerate(BufferedImage.TYPE_3BYTE_BGR);
 
-        IVideoProcessor processor = new DemoProcessor();
+        IVideoProcessor processor = new VideoProcessor();
         mediaReader.addListener(new ImageSnapListener(processor));
 
         // read out the contents of the media file and
