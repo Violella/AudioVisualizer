@@ -13,6 +13,27 @@ import java.util.ArrayList;
  */
 public class AudioAnalyzer {
 
+    public static ArrayList<Float> getSumData(float[] audio) {
+        ArrayList<Float> result = new ArrayList<Float>();
+
+        float band1 = audio[50];
+        float band2 = audio[100];
+        float band3 = audio[150];
+        float band4 = audio[200];
+        float band5 = audio[250];
+        float band6 = audio[300];
+        float tot = band1 + band2 + band3 + band4 + band5 + band6;
+
+        result.add(Math.abs(band1) / Math.abs(tot));
+        result.add(Math.abs(band2) / Math.abs(tot));
+        result.add(Math.abs(band3) / Math.abs(tot));
+        result.add(Math.abs(band4) / Math.abs(tot));
+        result.add(Math.abs(band5) / Math.abs(tot));
+        result.add(Math.abs(band6) / Math.abs(tot));
+
+        return result;
+    }
+
     public static ArrayList<Float> getFreqData(float[] audio) {
         Minim minim = new Minim(new AudioAnalyzer());
         AudioSample sample = minim.createSample(audio, new AudioFormat(44100, 16, 2, false, false));

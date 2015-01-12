@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Bietet eine Plattform um das Image anhand des AudioSamples zu bearbeiten.
  */
 public class VideoProcessor implements IVideoProcessor {
-    private ArrayList<Float> frequencyData =new ArrayList<Float>();
+    private ArrayList<Float> frequencyData;
 
     /**
      * @param image Images
@@ -19,25 +19,52 @@ public class VideoProcessor implements IVideoProcessor {
             return image;
         } else {
 
-        Color color;
-        Color newColor;
+            Color color;
+            int red;
+            int green;
+            int blue;
+            Color editedColor;
 
-        // Schleife über alle Pixel im Bild basierend auf Breite und Höhe (w = width, h = height)
-        for (int w = 0; w < image.getWidth(); w++) {
-            for (int h = 0; h < image.getHeight(); h++) {
+            // Schleife über alle Pixel im Bild basierend auf Breite und Höhe (w = width, h = height)
+            for (int w = 0; w < image.getWidth(); ++w) {
+                for (int h = 0; h < image.getHeight(); ++h) {
 
-                color = new Color(image.getRGB(w, h));
+                    color = new Color(image.getRGB(w, h));
+                    red = color.getRed();
+                    green = color.getGreen();
+                    blue = color.getBlue();
 
-                newColor = redish(color);
-                // newColor = blackWhite(newColor);
-                // newColor = gray(newColor);
+                    if(frequencyData.get(0)!= 0){
+                        red*=frequencyData.get(0);
+                    }
+                    if(frequencyData.get(1)!= 0){
+                        green*=frequencyData.get(1);
+                    }
+                    if(frequencyData.get(2)!= 0){
+                        blue*=frequencyData.get(2);
+                    }
 
-                // Pixelwert mit neuer Farbe an Position setzen
-                image.setRGB(w, h, newColor.getRGB());
+
+                    editedColor = new Color(red, green, blue);
+
+                    // Pixelwert mit neuer Farbe an Position setzen
+                    image.setRGB(w, h, editedColor.getRGB());
+                }
             }
-        }
             return image;
         }
+    }
+
+    /**
+     * Weist dem Imageprocessing eine neue Strategie je nach Audiosstream.
+     *
+     * @param audio Audio
+     */
+    public void processAudio(float[] audio) {
+        frequencyData = AudioAnalyzer.getSumData(audio);
+//        for (int i = 0; i < frequencyData.size(); ++i) {
+//            System.out.println(frequencyData.get(i));
+//        }
     }
 
     /**
@@ -85,14 +112,5 @@ public class VideoProcessor implements IVideoProcessor {
         } else {
             return new Color(255, 255, 255);
         }
-    }
-
-    /**
-     * Weist dem Imageprocessing eine neue Strategie je nach Audiosstream.
-     *
-     * @param audio Audio
-     */
-    public void processAudio(float[] audio) {
-        frequencyData = AudioAnalyzer.getFreqData(audio);
     }
 }
