@@ -148,6 +148,8 @@ public class Launcher extends Application {
                 // TODO: Implement
             }
         });
+        configButton.setDisable(true);
+
         final Button convertButton = createButton(Constants.IMAGE_PROCESSOR, "Film konvertieren");
         convertButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
