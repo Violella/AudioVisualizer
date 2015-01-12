@@ -1,7 +1,6 @@
 package ch.fhnw.meco.processor;
 
-import ddf.minim.AudioPlayer;
-import ddf.minim.AudioSource;
+import ddf.minim.AudioSample;
 import ddf.minim.Minim;
 import ddf.minim.analysis.FFT;
 
@@ -13,7 +12,7 @@ import java.util.ArrayList;
  */
 public class AudioAnalyzer {
 
-    public static ArrayList<Float> getFreqData(byte[] audio) {
+    public static ArrayList<Float> getFreqData(float[] audio) {
 
         // folgender code ist aus dem MinimTester kopiert
         // TODO: audio aus byte array in die minim analyse bringen, eventuell launcher abändern, dass ein float array mit audio übergeben wird wenn einfacher
@@ -22,15 +21,14 @@ public class AudioAnalyzer {
 
 
         Minim minim = new Minim(new AudioAnalyzer());
-        // minim.createSample(audio, ???);
+        AudioSample sample = minim.createSample(audio, new AudioFormat(44100,1024,1,false,false));
         // AudioSource as = new AudioSource(null); // ein audio input stream
-        AudioPlayer player = minim.loadFile("", 1024);
-
+        //AudioPlayer player = minim.loadFile("", 1024);
         // FFT fourier = new FFT(as.bufferSize(), as.sampleRate());
-        FFT fourier = new FFT(player.bufferSize(), player.sampleRate());
+        FFT fourier = new FFT(1024, 44100);
 
         // fourier.forward(as.mix);
-        fourier.forward(player.mix);
+        fourier.forward(sample.mix);
 
         float band1 = fourier.getBand(1) + fourier.getBand(2);
 

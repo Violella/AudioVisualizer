@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public interface IVideoProcessor {
 
-    public void processAudio(byte[] byteArray);
+    public void processAudio(float[] byteArray);
 
     public BufferedImage processImage(BufferedImage image);
 }

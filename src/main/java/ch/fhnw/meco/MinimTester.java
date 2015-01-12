@@ -130,7 +130,7 @@ public class MinimTester extends Application {
     public ArrayList<Float> getFreqData(){
         Minim minim = new Minim(new MinimTester());
         AudioPlayer player = minim.loadFile(fileName, 1024);
-        FFT fourier = new FFT(player.bufferSize(), audioPlayer.sampleRate());
+        FFT fourier = new FFT(1024, 44100);
 
         fourier.forward(audioPlayer.mix);
 

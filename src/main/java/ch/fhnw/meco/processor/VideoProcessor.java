@@ -1,7 +1,6 @@
 package ch.fhnw.meco.processor;
 
 import java.awt.*;
-import java.awt.geom.Arc2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -93,7 +92,7 @@ public class VideoProcessor implements IVideoProcessor {
      *
      * @param audio Audio
      */
-    public void processAudio(byte[] audio) {
-        // frequencyData = AudioAnalyzer.getFreqData(audio);
+    public void processAudio(float[] audio) {
+        frequencyData = AudioAnalyzer.getFreqData(audio);
     }
 }

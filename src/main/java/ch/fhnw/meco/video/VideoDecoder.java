@@ -1,7 +1,7 @@
 package ch.fhnw.meco.video;
 
-import ch.fhnw.meco.processor.VideoProcessor;
 import ch.fhnw.meco.processor.IVideoProcessor;
+import ch.fhnw.meco.processor.VideoProcessor;
 import com.xuggle.mediatool.IMediaReader;
 import com.xuggle.mediatool.MediaListenerAdapter;
 import com.xuggle.mediatool.ToolFactory;
@@ -11,6 +11,7 @@ import com.xuggle.xuggler.Global;
 import com.xuggle.xuggler.IAudioSamples;
 
 import java.awt.image.BufferedImage;
+import java.nio.FloatBuffer;
 
 /**
  * Analysiert den Film und zerlegt ihn in einzelne Teile.
@@ -58,9 +59,10 @@ public class VideoDecoder {
         @Override
         public void onAudioSamples(IAudioSamplesEvent event) {
             final IAudioSamples audioSamples = event.getAudioSamples();
-            final byte[] byteArray = audioSamples.getData().getByteArray(0, audioSamples.getSize());
-
-            processor.processAudio(byteArray);
+            //final byte[] byteArray = audioSamples.getData().getByteArray(0, audioSamples.getSize());
+            FloatBuffer floatBuff = audioSamples.getData().getByteBuffer(0, audioSamples.getSize()).asFloatBuffer();
+            final float[] floatArray = floatBuff.array();
+            processor.processAudio(floatArray);
         }
 
         public void onVideoPicture(IVideoPictureEvent event) {
