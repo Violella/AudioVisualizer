@@ -47,15 +47,6 @@ public class VideoEncoder {
             System.out.println("Div 1 Param : " + (System.nanoTime() - startTime));
             writer.encodeVideo(0, image, time, TimeUnit.NANOSECONDS);
             time += 50000000;
-
-            /*
-            // sleep for frame rate milliseconds
-            try {
-                Thread.sleep((long) (1000 / FRAME_RATE));
-            }
-            catch (InterruptedException e) {
-                // ignore
-            }*/
              
         }
          

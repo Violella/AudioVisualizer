@@ -2,13 +2,12 @@ package ch.fhnw.meco.processor;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 /**
  * Bietet eine Plattform um das Image anhand des AudioSamples zu bearbeiten.
  */
 public class VideoProcessor implements IVideoProcessor {
-    private ArrayList<Float> frequencyData;
+    private float[] frequencyData;
 
     /**
      * @param image Images
@@ -34,14 +33,14 @@ public class VideoProcessor implements IVideoProcessor {
                     green = color.getGreen();
                     blue = color.getBlue();
 
-                    if(frequencyData.get(0)!= 0){
-                        red*=frequencyData.get(0);
+                    if(frequencyData[0] != 0){
+                        red*=frequencyData[0];
                     }
-                    if(frequencyData.get(1)!= 0){
-                        green*=frequencyData.get(1);
+                    if(frequencyData[1] != 0){
+                        green*=frequencyData[1];
                     }
-                    if(frequencyData.get(2)!= 0){
-                        blue*=frequencyData.get(2);
+                    if(frequencyData[2] != 0){
+                        blue*=frequencyData[2];
                     }
 
 
@@ -60,11 +59,10 @@ public class VideoProcessor implements IVideoProcessor {
      *
      * @param audio Audio
      */
-    public void processAudio(float[] audio) {
-        frequencyData = AudioAnalyzer.getSumData(audio);
-//        for (int i = 0; i < frequencyData.size(); ++i) {
-//            System.out.println(frequencyData.get(i));
-//        }
+    public void processAudio(byte[] audio) {
+        float[] floaties = new float[audio.length];
+        for (int i = 0; i <audio.length; i++) floaties[i] = audio[i];
+        frequencyData = AudioAnalyzer.getSumData(floaties);
     }
 
     /**

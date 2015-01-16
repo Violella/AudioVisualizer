@@ -25,5 +25,8 @@
         <module name="AudioVisualizer" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="AudioVisualizer" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

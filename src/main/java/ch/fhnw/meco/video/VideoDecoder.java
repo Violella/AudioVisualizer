@@ -1,17 +1,17 @@
 package ch.fhnw.meco.video;
 
+import ch.fhnw.meco.processor.FilterProcessor;
 import ch.fhnw.meco.processor.IVideoProcessor;
-import ch.fhnw.meco.processor.VideoProcessor;
 import com.xuggle.mediatool.IMediaReader;
 import com.xuggle.mediatool.MediaListenerAdapter;
 import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.mediatool.event.IAudioSamplesEvent;
 import com.xuggle.mediatool.event.IVideoPictureEvent;
-import com.xuggle.xuggler.Global;
-import com.xuggle.xuggler.IAudioSamples;
+import com.xuggle.xuggler.*;
 
+import javax.sound.sampled.*;
 import java.awt.image.BufferedImage;
-import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 /**
  * Analysiert den Film und zerlegt ihn in einzelne Teile.
@@ -28,40 +28,99 @@ public class VideoDecoder {
     private static final double SECONDS_BETWEEN_FRAMES = 0.05; // Abtastrate
 
     private static final long MICRO_SECONDS_BETWEEN_FRAMES = (long) (Global.DEFAULT_PTS_PER_SECOND * SECONDS_BETWEEN_FRAMES);
+    private static SourceDataLine line;
 
     public static void manipulate(String inputFilename) {
         System.out.println("MICRO_SECONDS_BETWEEN_FRAMES: " + MICRO_SECONDS_BETWEEN_FRAMES);
         IMediaReader mediaReader = ToolFactory.makeReader(inputFilename);
+        mediaReader.open();
 
         // stipulate that we want BufferedImages created in BGR 24bit color space
         mediaReader.setBufferedImageTypeToGenerate(BufferedImage.TYPE_3BYTE_BGR);
+        mediaReader.addListener(new ImageSnapListener());
 
-        IVideoProcessor processor = new VideoProcessor();
-        mediaReader.addListener(new ImageSnapListener(processor));
+
+        openJavaSound(mediaReader);
 
         // read out the contents of the media file and
         // dispatch events to the attached listener
-        while (mediaReader.readPacket() == null) ;
+        while(mediaReader.readPacket() == null);
 
         mediaReader.close();
         VideoEncoder.build();
     }
 
+
+    /**
+     * Creates a Line for sound output via Java.
+     * @param mediaReader
+     */
+    private static void openJavaSound(IMediaReader mediaReader) {
+
+        int numStreams = mediaReader.getContainer().getNumStreams();
+
+        // and iterate through the streams to find the first audio stream
+        IStreamCoder audioCoder = null;
+        for(int i = 0; i < numStreams; i++) {
+            // Find the stream object
+            IStream stream = mediaReader.getContainer().getStream(i);
+            // Get the pre-configured decoder that can decode this stream;
+            IStreamCoder coder = stream.getStreamCoder();
+
+            if (coder.getCodecType() == ICodec.Type.CODEC_TYPE_AUDIO)
+            {
+                audioCoder = coder;
+                break;
+            }
+        }
+        audioCoder.open();
+
+
+        AudioFormat audioFormat = new AudioFormat(audioCoder.getSampleRate(), (int)IAudioSamples.findSampleBitDepth(audioCoder.getSampleFormat()),
+                                                  audioCoder.getChannels(),
+                                                  true, /* xuggler defaults to signed 16 bit samples */
+                                                  false);
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+        try {
+            line = (SourceDataLine) AudioSystem.getLine(info);
+            /**
+             * if that succeeded, try opening the line.
+             */
+            line.open(audioFormat);
+            /**
+             * And if that succeed, start the line.
+             */
+            line.start();
+            System.out.println(Arrays.toString(line.getControls()));
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException("could not open audio line");
+        }
+    }
+
+
+    private static void playJavaSound(IAudioSamples aSamples) {
+
+        /**
+         * We're just going to dump all the samples into the line.
+         */
+        byte[] rawBytes = aSamples.getData().getByteArray(0, aSamples.getSize());
+        line.write(rawBytes, 0, aSamples.getSize());
+    }
+
     private static class ImageSnapListener extends MediaListenerAdapter {
 
-        private IVideoProcessor processor;
-
-        public ImageSnapListener(IVideoProcessor processor) {
-            this.processor = processor;
-        }
+        private IVideoProcessor processor = new FilterProcessor();
 
         @Override
         public void onAudioSamples(IAudioSamplesEvent event) {
             final IAudioSamples audioSamples = event.getAudioSamples();
-            FloatBuffer floatBuff = audioSamples.getData().getByteBuffer(0, audioSamples.getSize()).asFloatBuffer();
-            float[] floatArray = new float[floatBuff.remaining()];
-            floatBuff.get(floatArray);
-            processor.processAudio(floatArray);
+
+            final byte[] byteBuffer = audioSamples.getData().getByteArray(0, audioSamples.getSize());
+
+//            System.out.println("audioSamples : " + audioSamples); // audioSamples : com.xuggle.xuggler.IAudioSamples@1638941504[sample rate:22050;channels:2;format:FMT_S16;time stamp:0;complete:true;num samples:1024;size:4096;key:true;time base:1/1000000;]
+//            System.out.println("byteBuffer : " + byteBuffer); // byteBuffer : java.nio.DirectByteBuffer[pos=0 lim=4096 cap=4096]
+
+            processor.processAudio(byteBuffer);
         }
 
         public void onVideoPicture(IVideoPictureEvent event) {
