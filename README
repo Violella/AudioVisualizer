@@ -1,4 +1,24 @@
-AudioVisualizer
----------------
+AudioVisualizer AudiVis 0.1
+----------------------------
 
-von Manuel Wehrli, Nicola Keller, Josiane Manera
+About
+-----
+AudiVis convert mp4 video footage on the basis of its audio.
+Change the current mp4 file under ch.fhnw.meco.util.Constants.VIDEO_NAME.
+
+Start
+-----
+Before you lanch the application under ch.fhnw.meco.ui.Launcher you need the following setup:
+• VM-Options:     -Xmx1g -XX:MaxHeapSize=1g
+• JDK:            1.8  32-bit (64-bit won't work due to Xuggler)
+• Maven:          Run the Maven pom.xml (for installing Xuggler and co libs)
+
+Frameworks
+----------
+• JDK 1.8
+• Minim 2.2.0
+• Xuggler 5.4
+
+Authors
+-------
+Manuel Wehrli, Nicola Keller, Josiane Manera
