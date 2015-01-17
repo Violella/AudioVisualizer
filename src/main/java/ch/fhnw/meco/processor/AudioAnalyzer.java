@@ -17,8 +17,7 @@ public class AudioAnalyzer {
     private static final float MAGNIFIER = 2.5f;
     private static final float ALPHA_VALUE_OF_COLOR = 0.5f;
 
-    /**
-     * Der Audiostream wird mit einer Fast Fourier Transformation analysiert.
+    /**     * Der Audiostream wird mit einer Fast Fourier Transformation analysiert.
      * Die Höhe der Amplitude bestimmt die ausgegebene Farbe.
      * Je Höher desto rötlicher, je tiefer desto grüner wird die ausgegebene Farbe.
      *
