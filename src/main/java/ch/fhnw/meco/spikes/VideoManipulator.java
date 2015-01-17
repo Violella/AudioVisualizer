@@ -1,11 +1,8 @@
-package ch.fhnw.meco;
+package ch.fhnw.meco.spikes;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-/**
- * Created by Manuel Wehrli on 09.01.2015.
- */
 public class VideoManipulator {
     private BufferedImage frame;
     private double[] frequencyTable;

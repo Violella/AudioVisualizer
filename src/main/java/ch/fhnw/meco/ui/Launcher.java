@@ -22,16 +22,18 @@ import javafx.stage.Stage;
 import java.io.File;
 
 /**
- * @author Josiane Manera
+ * Startet die Applikation AudioVisualizer.
+ * Initialisiert wird dabei das ganze JavaFx UI.
+ *
  */
 public class Launcher extends Application {
 
     private static final int BUTTON_SIZE = 32;
     private static final int SPACING_VERTICAL = 5;
     private static final int SPACING_HORIZONTAL = 10;
-    private static int WIDTH = 600;
-    private static int HEIGHT = 810;
-    private static int FOOTAGE_HEIGHT = 340;
+    private static final int WIDTH = 600;
+    private static final int HEIGHT = 810;
+    private static final int FOOTAGE_HEIGHT = 340;
     private ProgressBar progress;
 
     public static void main(String[] args) {
@@ -202,7 +204,9 @@ public class Launcher extends Application {
 
     private void createProgressBar() {
         progress = new ProgressBar();
-        progress.setTooltip(new Tooltip("Video wird bearbeitet. Bitte warten..."));
+        final Tooltip tooltip = new Tooltip("Video wird bearbeitet. Bitte warten...");
+        tooltip.setFont(Font.font("Verdana", BUTTON_SIZE));
+        progress.setTooltip(tooltip);
         progress.setMaxWidth(WIDTH);
         progress.setVisible(false);
     }

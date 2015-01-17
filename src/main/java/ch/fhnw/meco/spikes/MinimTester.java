@@ -1,4 +1,4 @@
-package ch.fhnw.meco;
+package ch.fhnw.meco.spikes;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
@@ -20,9 +20,6 @@ import javafx.stage.Stage;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-/**
- * @author Josiane Manera
- */
 public class MinimTester extends Application {
 
     AudioPlayer audioPlayer;

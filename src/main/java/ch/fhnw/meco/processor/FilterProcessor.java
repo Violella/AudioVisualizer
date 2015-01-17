@@ -4,10 +4,17 @@ package ch.fhnw.meco.processor;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ *  Strategie um das Bild mit einem halbtransparenten Farb-Overlay zu manipulieren.
+ *  Dieser Prozess ist viel zeitsparender als das prozessieren jedes einzelnen Pixels wie in der Strategie {@link VideoProcessor}.
+ */
 public class FilterProcessor implements IVideoProcessor {
 
-    private Color color = new Color(0, 0, 1, 0.5f);
+    private Color color = new Color(0.1f, 0.1f, 0.1f, 0.1f);
 
+    /**
+     *  {@inheritDoc}
+     */
     @Override
     public void processAudio(byte[] audio) {
         float[] floaties = new float[audio.length];
@@ -15,12 +22,22 @@ public class FilterProcessor implements IVideoProcessor {
         color = AudioAnalyzer.getFftColor(floaties);
     }
 
+    /**
+     *  {@inheritDoc}
+     */
     @Override
     public BufferedImage processImage(BufferedImage image) {
         return colorImage(image, color);
     }
 
-    public BufferedImage colorImage(BufferedImage image, Color newColor) {
+    /**
+     * Erstellt ein neues Bild und zeichnet das Video-Image zusammen mit einem halbtransparenten, Farb-Overlay darüber.
+
+     * @param image     Video-Image
+     * @param newColor  Farbe für das Overlay
+     * @return          Manipuliertes Bild
+     */
+    private BufferedImage colorImage(BufferedImage image, Color newColor) {
 
         BufferedImage result = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TRANSLUCENT);
         Graphics2D graphics = result.createGraphics();
@@ -30,6 +47,7 @@ public class FilterProcessor implements IVideoProcessor {
         graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
         graphics.dispose();
 
+        // Bringt Bild in das richtige Ausgabeformat
         BufferedImage finalResult = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         graphics = finalResult.createGraphics();
         graphics.drawImage(result, null, 0, 0);

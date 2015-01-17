@@ -8,18 +8,56 @@ import javax.sound.sampled.AudioFormat;
 import java.awt.*;
 
 /**
- * Created by Manuel on 11.01.2015.
+ * Besitzt verschiedene Funktionen zur Analyse eines Audio Streams.
+ *
  */
 public class AudioAnalyzer {
 
-    public static float[] getSumData(float[] audioSample) {
+    private static final int DOUBLED_SAMPLE_RATE = 44100;
+    private static final float MAGNIFIER = 2.5f;
+    private static final float ALPHA_VALUE_OF_COLOR = 0.5f;
 
-        float band1 = Math.abs(audioSample[50]);
-        float band2 = Math.abs(audioSample[100]);
-        float band3 = Math.abs(audioSample[150]);
-        float band4 = Math.abs(audioSample[200]);
-        float band5 = Math.abs(audioSample[250]);
-        float band6 = Math.abs(audioSample[300]);
+    /**
+     * Der Audiostream wird mit einer Fast Fourier Transformation analysiert.
+     * Die Höhe der Amplitude bestimmt die ausgegebene Farbe.
+     * Je Höher desto rötlicher, je tiefer desto grüner wird die ausgegebene Farbe.
+     *
+     * @param audio     Audiostream als Float Array
+     * @return          Farbe
+     */
+    public static Color getFftColor(float[] audio) {
+
+        final FFT fft = new FFT(audio.length, DOUBLED_SAMPLE_RATE);
+        fft.forward(audio);
+
+        float avgBand  = 0;
+        float highestBand = 0;
+        for (int i = 0; i < fft.specSize(); i++) {
+            final float band = fft.getBand(i);
+            avgBand += band;
+            if (band > highestBand) highestBand = band;
+        }
+        avgBand /= (float) fft.specSize();
+        float colorMultiplier = (avgBand / highestBand) * MAGNIFIER;
+
+        return new Color(colorMultiplier, 1 - colorMultiplier, 0,  ALPHA_VALUE_OF_COLOR);
+    }
+
+    /**
+     * Zu Testzwecken werden aus dem Audiosammple Werte bezogen.
+     * Aus dem Float Array kann danach eine Farbe erzeugt werden.
+     *
+     * @param   audio    Audiostream als Float Array
+     * @return
+     */
+    public static float[] getSumData(float[] audio) {
+
+        float band1 = Math.abs(audio[50]);
+        float band2 = Math.abs(audio[100]);
+        float band3 = Math.abs(audio[150]);
+        float band4 = Math.abs(audio[200]);
+        float band5 = Math.abs(audio[250]);
+        float band6 = Math.abs(audio[300]);
 
         float tot = band1 + band2 + band3 + band4 + band5 + band6;
 
@@ -34,11 +72,17 @@ public class AudioAnalyzer {
         return result;
     }
 
+    /**
+     * Analyse der Audiodaten mit Minim.
+     *
+     * @param audio
+     * @return
+     */
     public static float[] getFreqData(float[] audio) {
 
 
         Minim minim = new Minim(new AudioAnalyzer());
-        AudioSample sample = minim.createSample(audio, new AudioFormat(44100, 16, 2, false, false));
+        AudioSample sample = minim.createSample(audio, new AudioFormat(DOUBLED_SAMPLE_RATE, 16, 2, false, false));
 
         FFT fourier = new FFT(sample.bufferSize(), sample.sampleRate());
 
@@ -82,29 +126,5 @@ public class AudioAnalyzer {
         minim.dispose();
 
         return result;
-    }
-
-    public static Color getFftColor(float[] audio) {
-
-        final FFT fft = new FFT(audio.length,  44100);
-        fft.forward(audio);
-
-        float avg  = 0;
-        float highestBand = 0;
-        for (int i = 0; i < fft.specSize(); i++) {
-            final float band = fft.getBand(i);
-            avg += band;
-            if (band > highestBand) highestBand = band;
-        }
-        avg /= (float) fft.specSize();
-
-        float colorMultiplier = (avg / highestBand ) * 2;
-        return new Color(colorMultiplier, colorMultiplier, colorMultiplier, 0.5f);
-
-//        final int red   = ( (int) Math.abs(avg)) % 254;
-//        final int green = ( (int) Math.abs(fft.getBand(fft.specSize()))) % 254;
-//        final int blue  = ( (int) Math.abs(fft.getBand(fft.specSize()/2))) % 254;
-//        return new Color(red, green, blue, 128);
-
     }
 }

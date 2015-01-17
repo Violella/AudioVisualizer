@@ -1,5 +1,8 @@
 package ch.fhnw.meco.util;
 
+/**
+ * Ablage von globalen Konstanten wie Pfandangaben.
+ */
 public class Constants {
 
     // Path from working directory
@@ -11,8 +14,8 @@ public class Constants {
     public static final String MP4 = ".mp4";
 
     // Video
-    //private static final String VIDEO_NAME             = "lightsaber";
-    private static final String VIDEO_NAME               = "big_buck_bunny";
+    private static final String VIDEO_NAME             = "catAccident";
+//    private static final String VIDEO_NAME               = "big_buck_bunny";
     public static final String VIDEO_DEFAULT_SOURCE      = PATH_VIDEO_RESOURCES + VIDEO_NAME + MP4;
     public static final String VIDEO_DEFAULT_DESTINATION = PATH_VIDEO_RESOURCES + VIDEO_NAME + MP4_MANIPULATED;
 

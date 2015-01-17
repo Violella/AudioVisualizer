@@ -4,15 +4,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Bietet eine Plattform um das Image anhand des AudioSamples zu bearbeiten.
+ * Strategie um Pixels dem Image einzeln zu manipulieren.
+ *
  */
 public class VideoProcessor implements IVideoProcessor {
     private float[] frequencyData;
 
     /**
-     * @param image Images
-     * @return Image
+     *  {@inheritDoc}
      */
+    @Override
     public BufferedImage processImage(BufferedImage image) {
         if (frequencyData == null) {
             return image;
@@ -55,10 +56,9 @@ public class VideoProcessor implements IVideoProcessor {
     }
 
     /**
-     * Weist dem Imageprocessing eine neue Strategie je nach Audiosstream.
-     *
-     * @param audio Audio
+     *  {@inheritDoc}
      */
+    @Override
     public void processAudio(byte[] audio) {
         float[] floaties = new float[audio.length];
         for (int i = 0; i <audio.length; i++) floaties[i] = audio[i];
@@ -66,10 +66,10 @@ public class VideoProcessor implements IVideoProcessor {
     }
 
     /**
-     * Vergrauung an dunklen Stellen.
+     * Wendet ein Vergrauungs-Schema auf der Pixelfarbe an.
      *
-     * @param color
-     * @return
+     * @param color     Pixelfarbe
+     * @return          Farbe mit angewandtem Vergrauungs-Schema
      */
     private static Color gray(Color color) {
         int r = color.getRed();
@@ -89,20 +89,20 @@ public class VideoProcessor implements IVideoProcessor {
     }
 
     /**
-     * Rotfilter auf Bild.
+     * Wendet eine Rot-Schema auf der Pixelfarbe an.
      *
-     * @param color
-     * @return
+     * @param color     Pixelfarbe
+     * @return          Farbe mit angewandtem Rot-Schema
      */
     private static Color redish(Color color) {
         return new Color(color.getRed(), 0, 0);
     }
 
     /**
-     * Schwarzweiss Bild
+     * Wendet eine Schwarzweiss-Schema auf der Pixelfarbe an.
      *
-     * @param color
-     * @return
+     * @param color     Pixelfarbe
+     * @return          Farbe mit angewandtem Schwarzweiss-Schema
      */
     private static Color blackWhite(Color color) {
         if ((color.getRed() + color.getGreen() + color.getBlue()) < (255 * 3) / 3) {
