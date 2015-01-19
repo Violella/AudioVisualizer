@@ -28,14 +28,14 @@ public class VideoDecoder {
     private static final long MICRO_SECONDS_BETWEEN_FRAMES = (long) (Global.DEFAULT_PTS_PER_SECOND * SECONDS_BETWEEN_FRAMES);
     private static SourceDataLine line;
 
-    public static void manipulate(String inputFilename) {
+    public static void decode(String inputFilename) {
         log.log(Level.FINE, "Micro seconds between frames " + MICRO_SECONDS_BETWEEN_FRAMES);
         IMediaReader mediaReader = ToolFactory.makeReader(inputFilename);
         mediaReader.open();
 
         // Der Reader soll BufferedImage in einem BGR 24bit Farbraum erstellen
         mediaReader.setBufferedImageTypeToGenerate(BufferedImage.TYPE_3BYTE_BGR);
-        mediaReader.addListener(new ImageSnapListener());
+        mediaReader.addListener(new ImageAudioSnapListener());
 
         openJavaSound(mediaReader);
 
@@ -43,7 +43,7 @@ public class VideoDecoder {
         while(mediaReader.readPacket() == null);
 
         mediaReader.close();
-        VideoEncoder.build();
+        VideoEncoder.encode();
     }
 
 
@@ -98,7 +98,7 @@ public class VideoDecoder {
     /**
      * Listener der beim Readvorgang der MediaReaders aktiv wird.
      */
-    private static class ImageSnapListener extends MediaListenerAdapter {
+    private static class ImageAudioSnapListener extends MediaListenerAdapter {
 
         private static final int INTIAL_STREAM_INDEX = -1;
 

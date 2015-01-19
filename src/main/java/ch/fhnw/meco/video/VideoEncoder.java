@@ -32,7 +32,7 @@ public class VideoEncoder {
      * Setzt die Bilder der internen Liste zu einem Film zusammen.
      *
      */
-    public static void build() {
+    public static void encode() {
         File file = new File(outputFilename);
 
         // IMediaWriter schreibt das Output-Video.

@@ -162,7 +162,7 @@ public class Launcher extends Application {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        VideoDecoder.manipulate(Constants.VIDEO_DEFAULT_SOURCE);
+                        VideoDecoder.decode(Constants.VIDEO_DEFAULT_SOURCE);
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
