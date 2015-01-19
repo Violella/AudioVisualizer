@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 /**
  * Analysiert den Film und zerlegt ihn in einzelne Teile.
  */
-public class VideoDecoder {
+public class VideoDecoder extends VideoEncoder {
 
     private static final Logger log = Logger.getLogger(VideoDecoder.class.getName());
 
