@@ -30,17 +30,16 @@ public class VideoEncoder {
 
     /**
      * Setzt die Bilder der internen Liste zu einem Film zusammen.
-     *
      */
     public static void encode() {
         File file = new File(outputFilename);
 
         // IMediaWriter schreibt das Output-Video.
         final IMediaWriter writer = ToolFactory.makeWriter(file.toString());
-         
+
         // We tell it we're going to add one video stream, with id 0, at position 0, and that it will have a fixed frame rate of FRAME_RATE.
         writer.addVideoStream(STREAM_ZERO, STREAM_ID, ICodec.ID.CODEC_ID_H264, list.element().getWidth(), list.element().getHeight());
- 
+
         long startTime = System.nanoTime();
         long time = START_TIME;
 
@@ -66,7 +65,7 @@ public class VideoEncoder {
      * Hinzugefügte Images werden vom Encoder zu einem Video zusammengesetzt.
      * Die Reihenfolge ist dabei essentiel.
      *
-     * @param processedImage    Image das im Video erscheinen soll.
+     * @param processedImage Image das im Video erscheinen soll.
      */
     public static void add(BufferedImage processedImage) {
         list.add(processedImage);

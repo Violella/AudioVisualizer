@@ -1,13 +1,16 @@
 package ch.fhnw.meco.ui;
 
-import ch.fhnw.meco.video.VideoDecoder;
 import ch.fhnw.meco.util.Constants;
+import ch.fhnw.meco.video.VideoDecoder;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -24,7 +27,6 @@ import java.io.File;
 /**
  * Startet die Applikation AudioVisualizer.
  * Initialisiert wird dabei das ganze JavaFx UI.
- *
  */
 public class Launcher extends Application {
 
@@ -40,7 +42,6 @@ public class Launcher extends Application {
         launch(args);
     }
 
-
     @Override
     public void start(Stage stage) {
 
@@ -54,7 +55,6 @@ public class Launcher extends Application {
         stage.getIcons().add(new Image(Constants.APPLICATION_ICON));
         stage.show();
     }
-
 
     /**
      * Initialisiert alle UI Komponenten und fügt sie dem StackPane hinzu.
@@ -88,8 +88,8 @@ public class Launcher extends Application {
     /**
      * Gibt eine MediaView zurück.
      *
-     * @param file  Filmpfad
-     * @return      MediaView
+     * @param file Filmpfad
+     * @return MediaView
      */
     private MediaView createMediaPlayer(String file) {
         final MediaPlayer mediaPlayer = getMediaPlayer(file);
@@ -102,8 +102,8 @@ public class Launcher extends Application {
     /**
      * Gibt einen MediaPlayer mit dem entsprechenden Media zurück.
      *
-     * @param file  Filmpfad
-     * @return      MediaPlayer
+     * @param file Filmpfad
+     * @return MediaPlayer
      */
     private MediaPlayer getMediaPlayer(String file) {
         final Media media = new Media(new File(file).toURI().toString());
@@ -113,9 +113,9 @@ public class Launcher extends Application {
     /**
      * Erzeugt eine Toolbar mit Buttons zum manipulieren des Filmes.
      *
-     * @param originalMediaView     MediaView mit originalem Video
-     * @param resultMediaView       MediaVierw mir resultierendem Video
-     * @return                      Pane mit den Toolbar Komponenten
+     * @param originalMediaView MediaView mit originalem Video
+     * @param resultMediaView   MediaVierw mir resultierendem Video
+     * @return Pane mit den Toolbar Komponenten
      */
     private HBox createPlayToolbar(final MediaView originalMediaView, final MediaView resultMediaView) {
 
@@ -190,7 +190,7 @@ public class Launcher extends Application {
      *
      * @param imagePath Anzeigebild
      * @param tooltip   Tooltip
-     * @return          Button
+     * @return Button
      */
     private Button createButton(String imagePath, String tooltip) {
         final Image image = new Image(getClass().getResourceAsStream(imagePath), BUTTON_SIZE, BUTTON_SIZE, true, true);

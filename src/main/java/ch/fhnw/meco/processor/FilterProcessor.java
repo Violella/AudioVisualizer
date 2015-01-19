@@ -1,29 +1,27 @@
 package ch.fhnw.meco.processor;
 
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- *  Strategie um das Bild mit einem halbtransparenten Farb-Overlay zu manipulieren.
- *  Dieser Prozess ist viel zeitsparender als das prozessieren jedes einzelnen Pixels wie in der Strategie {@link VideoProcessor}.
+ * Strategie um das Bild mit einem halbtransparenten Farb-Overlay zu manipulieren.
  */
 public class FilterProcessor implements IVideoProcessor {
 
     private Color color = new Color(0.1f, 0.1f, 0.1f, 0.1f);
 
     /**
-     *  {@inheritDoc}
+     * {@inheritDoc}
      */
     @Override
     public void processAudio(byte[] audio) {
         float[] floaties = new float[audio.length];
-        for (int i = 0; i <audio.length; i++) floaties[i] = audio[i];
+        for (int i = 0; i < audio.length; i++) floaties[i] = audio[i];
         color = AudioAnalyzer.getFftColor(floaties);
     }
 
     /**
-     *  {@inheritDoc}
+     * {@inheritDoc}
      */
     @Override
     public BufferedImage processImage(BufferedImage image) {
@@ -32,10 +30,10 @@ public class FilterProcessor implements IVideoProcessor {
 
     /**
      * Erstellt ein neues Bild und zeichnet das Video-Image zusammen mit einem halbtransparenten, Farb-Overlay darüber.
-
-     * @param image     Video-Image
-     * @param newColor  Farbe für das Overlay
-     * @return          Manipuliertes Bild
+     *
+     * @param image    Video-Image
+     * @param newColor Farbe für das Overlay
+     * @return Manipuliertes Bild
      */
     private BufferedImage colorImage(BufferedImage image, Color newColor) {
 

@@ -40,15 +40,15 @@ public class VideoDecoder extends VideoEncoder {
         openJavaSound(mediaReader);
 
         // Liest den Inhalt aus dem Mediafile und benachrichtigt den Event an Listeners
-        while(mediaReader.readPacket() == null);
+        while (mediaReader.readPacket() == null) ;
 
         mediaReader.close();
         VideoEncoder.encode();
     }
 
-
     /**
      * Creates a Line for sound output via Java.
+     *
      * @param mediaReader
      */
     private static void openJavaSound(IMediaReader mediaReader) {
@@ -57,7 +57,7 @@ public class VideoDecoder extends VideoEncoder {
 
         // Sucht den ersten Audiostream
         IStreamCoder audioCoder = null;
-        for(int i = 0; i < numStreams; ++i) {
+        for (int i = 0; i < numStreams; ++i) {
 
             IStream stream = mediaReader.getContainer().getStream(i);
             IStreamCoder coder = stream.getStreamCoder();
@@ -69,10 +69,10 @@ public class VideoDecoder extends VideoEncoder {
         }
         audioCoder.open();
 
-        AudioFormat audioFormat = new AudioFormat(audioCoder.getSampleRate(), (int)IAudioSamples.findSampleBitDepth(audioCoder.getSampleFormat()),
-                                                  audioCoder.getChannels(),
-                                                  true, /* xuggler defaults to signed 16 bit samples */
-                                                  false);
+        AudioFormat audioFormat = new AudioFormat(audioCoder.getSampleRate(), (int) IAudioSamples.findSampleBitDepth(audioCoder.getSampleFormat()),
+                audioCoder.getChannels(),
+                true, /* xuggler defaults to signed 16 bit samples */
+                false);
         DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
         try {
             line = (SourceDataLine) AudioSystem.getLine(info);
@@ -84,10 +84,10 @@ public class VideoDecoder extends VideoEncoder {
         }
     }
 
-
     /**
      * Output eines Xuggler AudioSamples über Java
-     * @param audioSamples      Xuggler AudioSamples
+     *
+     * @param audioSamples Xuggler AudioSamples
      */
     private static void playJavaSound(IAudioSamples audioSamples) {
         // Dumpt alle samples in die Line

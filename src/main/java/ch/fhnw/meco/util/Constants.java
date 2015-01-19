@@ -12,13 +12,6 @@ public class Constants {
     // Formats
     public static final String MP4_MANIPULATED = "_m1.mp4";
     public static final String MP4 = ".mp4";
-
-    // Video
-    // private static final String VIDEO_NAME            = "catAccident";
-    private static final String VIDEO_NAME           = "big_buck_bunny";
-    public static final String VIDEO_DEFAULT_SOURCE      = PATH_VIDEO_RESOURCES + VIDEO_NAME + MP4;
-    public static final String VIDEO_DEFAULT_DESTINATION = PATH_VIDEO_RESOURCES + VIDEO_NAME + MP4_MANIPULATED;
-
     // Images
     public static final String IMAGE_PLAY = "/images/play.png";
     public static final String IMAGE_STOP = "/images/stop.png";
@@ -26,7 +19,10 @@ public class Constants {
     public static final String IMAGE_CONFIG = "/images/config.png";
     public static final String IMAGE_PROCESSOR = "/images/film.png";
     public static final String APPLICATION_ICON = "/images/audiVis.png";
-
     // Strings
     public static final String APPLICATION_NAME = "AudioVisualizer";
+    // Video
+    private static final String VIDEO_NAME = "big_buck_bunny";
+    public static final String VIDEO_DEFAULT_SOURCE = PATH_VIDEO_RESOURCES + VIDEO_NAME + MP4;
+    public static final String VIDEO_DEFAULT_DESTINATION = PATH_VIDEO_RESOURCES + VIDEO_NAME + MP4_MANIPULATED;
 }
