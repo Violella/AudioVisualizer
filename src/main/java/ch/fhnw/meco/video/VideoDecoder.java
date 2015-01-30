@@ -69,6 +69,7 @@ public class VideoDecoder extends VideoEncoder {
         }
         audioCoder.open();
 
+
         AudioFormat audioFormat = new AudioFormat(audioCoder.getSampleRate(), (int) IAudioSamples.findSampleBitDepth(audioCoder.getSampleFormat()),
                 audioCoder.getChannels(),
                 true, /* xuggler defaults to signed 16 bit samples */
